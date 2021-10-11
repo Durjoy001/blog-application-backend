@@ -1,14 +1,33 @@
+var express = require('express'), negotiate = require('express-negotiate');
+var js2xmlparser = require("js2xmlparser");
 const Blog = require('./../models/blogModel');
+
+
 exports.getAllBlogs = async(req,res) => {
     try{
         const blogs = await Blog.find();
-        res.status(200).json({
+        req.negotiate({
+            'default': function() {
+                res.status(200).json({
+                    status: 'sucess',
+                    results: blogs.length,
+                    data: {
+                       blogs
+                    }
+               });
+          }
+          , 'xml': function() {
+              const x  = JSON.parse(JSON.stringify(blogs));
+              res.send(js2xmlparser.parse("data", x));
+          }
+      });
+        /*res.status(200).json({
             status: 'sucess',
             results: blogs.length,
             data: {
                blogs
             }
-       });
+       }); */
     }catch(err){
         res.status(404).json({
             status: 'fail',
