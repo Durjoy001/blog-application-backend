@@ -17,8 +17,8 @@ exports.getAllBlogs = async(req,res) => {
                });
           }
           , 'xml': function() {
-              const x  = JSON.parse(JSON.stringify(blogs));
-              res.send(js2xmlparser.parse("data", x));
+              const newObj  = JSON.parse(JSON.stringify(blogs));
+              res.send(js2xmlparser.parse("data", newObj));
           }
       });
     }catch(err){
@@ -41,8 +41,8 @@ exports.getBlog = async (req,res) => {
                });
           }
           , 'xml': function() {
-              const x  = JSON.parse(JSON.stringify(blog));
-              res.send(js2xmlparser.parse("data", x));
+              const newObj  = JSON.parse(JSON.stringify(blog));
+              res.send(js2xmlparser.parse("data", newObj));
           }
         });
     }catch(err){
@@ -55,13 +55,20 @@ exports.getBlog = async (req,res) => {
 exports.createBlog =  async(req,res) => {
     try{
         const newBlog = await Blog.create(req.body);
-
-        res.status(201).json({
-            status: 'sucess',
-            data: {
-                Blog: newBlog
-            }
-       });
+        req.negotiate({
+            'default': function() {
+                res.status(201).json({
+                    status: 'sucess',
+                    data: {
+                        Blog: newBlog
+                    }
+               });
+          }
+          , 'xml': function() {
+              const newObj  = JSON.parse(JSON.stringify(newBlog));
+              res.send(js2xmlparser.parse("data", newObj));
+          }
+        });
     }catch(err){
         res.status(400).json({
             status: 'fail',
@@ -75,12 +82,20 @@ exports.updateBlog = async(req,res) => {
             new: true,
             runValidators: true
         });
-
-        res.status(200).json({
-            status: 'sucess',
-            data: {
-               blog
-            }
+        
+        req.negotiate({
+            'default': function() {
+                res.status(200).json({
+                    status: 'sucess',
+                    data: {
+                        Blog: blog
+                    }
+               });
+          }
+          , 'xml': function() {
+              const newObj  = JSON.parse(JSON.stringify(blog));
+              res.send(js2xmlparser.parse("data", newObj));
+          }
         });
    }catch(err){
         res.status(404).json({
