@@ -3,7 +3,7 @@ exports.getAllBlogs = async(req,res) => {
     try{
         const blogs = await Blog.find();
         res.status(200).json({
-            status: 'sucess300',
+            status: 'sucess',
             results: blogs.length,
             data: {
                blogs
@@ -38,7 +38,7 @@ exports.createBlog =  async(req,res) => {
         const newBlog = await Blog.create(req.body);
 
         res.status(201).json({
-            status: 'sucess100',
+            status: 'sucess',
             data: {
                 Blog: newBlog
             }
@@ -58,7 +58,7 @@ exports.updateBlog = async(req,res) => {
         });
 
         res.status(200).json({
-            status: 'sucess200',
+            status: 'sucess',
             data: {
                blog
             }
@@ -75,7 +75,7 @@ exports.deleteBlog =async (req,res) => {
     try{
         await Blog.findByIdAndDelete(req.params.id);
         res.status(204).json({
-            status: 'sucesssssss',
+            status: 'sucess',
             data: null
         });
     }catch(err){
