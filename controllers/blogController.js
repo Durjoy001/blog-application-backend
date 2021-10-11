@@ -21,13 +21,6 @@ exports.getAllBlogs = async(req,res) => {
               res.send(js2xmlparser.parse("data", x));
           }
       });
-        /*res.status(200).json({
-            status: 'sucess',
-            results: blogs.length,
-            data: {
-               blogs
-            }
-       }); */
     }catch(err){
         res.status(404).json({
             status: 'fail',
@@ -36,15 +29,22 @@ exports.getAllBlogs = async(req,res) => {
     }
 };
 exports.getBlog = async (req,res) => {
-
     try{
         const blog = await Blog.findById(req.params.id);
-        res.status(200).json({
-        status: 'sucess',
-        data: {
-           blog
-        } 
-    });
+        req.negotiate({
+            'default': function() {
+                res.status(200).json({
+                    status: 'sucess',
+                    data: {
+                       blog
+                    }
+               });
+          }
+          , 'xml': function() {
+              const x  = JSON.parse(JSON.stringify(blog));
+              res.send(js2xmlparser.parse("data", x));
+          }
+        });
     }catch(err){
         res.status(404).json({
             status: 'fail',
