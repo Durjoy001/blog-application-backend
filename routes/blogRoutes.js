@@ -13,7 +13,7 @@ router.route('/')
 
 router.route('/:id').
 get(blogController.getBlog).
-patch(blogController.updateBlog).
+patch(blogValidators.updateBlogValidation(),blogValidators.validate,blogController.updateBlog).
 delete(blogController.deleteBlog);
 
 module.exports = router;

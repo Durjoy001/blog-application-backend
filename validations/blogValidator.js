@@ -4,9 +4,17 @@ exports.createBlogValidation = () => {
   return [
     //body('username').isEmail(),
     body('name').isLength({ min: 5 , max: 100}).withMessage('name must be between 5 to 100 letter'),
-    body('description').isLength({ min: 5 , max: 1000}),
+    body('description').isLength({ min: 5 , max: 1000}).withMessage('description must be between 5 to 1000 letter'),
   ]
 }
+
+exports.updateBlogValidation = () => {
+    return [
+      body('name').isLength({ min: 5 , max: 100}).withMessage('name must be between 5 to 100 letter'),
+      body('description').isLength({ min: 5 , max: 1000}).withMessage('description must be between 5 to 1000 letter'),
+    ]
+  }
+  
 
 exports.validate = (req, res, next) => {
   const errors = validationResult(req)
