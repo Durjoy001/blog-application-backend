@@ -11,10 +11,10 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-validator": "^6.13.0",
     "mongoose": "^5.13.10",
     "morgan": "^1.10.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Durjoy001/blog-application-backend.git"
