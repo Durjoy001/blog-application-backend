@@ -1,37 +1,23 @@
 
-const{MongoBlogService} = require('./mongoBlogService');
-const{mysqlBlogService} = require('./mysqlBlogService');
-
+const { BlogDao } = require('../dao and dto/blogDao');
 class BlogService{
-    constructor(){
-        if(this.service){
-            return this.service;
-        }
-        else{
-            if(process.env.DATABASE_NAME == 'mysql'){
-                this.service = new mysqlBlogService();
-            }
-            else{
-                this.service = new MongoBlogService();
-               
-            }
-        };
+    constructor(blogDao){
+       this.blogDao = blogDao;
     }
     createBlog(blogBody){
-        return this.service.createBlog(blogBody);
+        return this.blogDao.createBlog(blogBody);
     };
     getBlog(blogId){
-        return this.service.getBlog(blogId);
+        return this.blogDao.getBlog(blogId);
     };
     getAllBlogs(){
-        console.log("jsdhfjkdsh");
-        return this.service.getAllBlogs();
+        return this.blogDao.getAllBlogs();
     };
     updateBlog(blogId, updateBody){
-        return this.service.updateBlog(blogId, updateBody)
+        return this.blogDao.updateBlog(blogId, updateBody);
     };
     deleteBlog(blogId){
-        return this.service.deleteBlog(blogId)
+        return this.blogDao.deleteBlog(blogId);
     };
 }
 

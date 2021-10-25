@@ -1,11 +1,13 @@
+const { MongoDbDao } = require('../dao and dto/mongoDbDao');
 const { BlogService } = require('../services/blogService');
 
-const blogService = new BlogService();
+
+const blogDao = new MongoDbDao();
+
+const blogService = new BlogService(blogDao);
 
 exports.getAllBlogs = async(req,res) => {
     try{
-        //const blogs = await Blog.find();
-        console.log('bal');
         const blogs = await blogService.getAllBlogs();
         
         res.status(200).json({
@@ -25,7 +27,6 @@ exports.getAllBlogs = async(req,res) => {
 exports.getBlog = async (req,res) => {
 
     try{
-        //const blog = await Blog.findById(req.params.id);
         const blog = await blogService.getBlog(req.params.id);
         res.status(200).json({
         status: 'sucess',
@@ -42,7 +43,6 @@ exports.getBlog = async (req,res) => {
 };
 exports.createBlog =  async(req,res) => {
     try{
-        //const newBlog = await Blog.create(req.body);
         const blog = await blogService.createBlog(req.body)
 
         res.status(201).json({
@@ -60,10 +60,6 @@ exports.createBlog =  async(req,res) => {
 };
 exports.updateBlog = async(req,res) => {
    try{
-        /*const blog = await Blog.findByIdAndUpdate(req.params.id, req.body,{
-            new: true,
-            runValidators: true
-        });*/
         const blog = await blogService.updateBlog(req.params.id, req.body);
 
         res.status(200).json({
@@ -82,7 +78,6 @@ exports.updateBlog = async(req,res) => {
 
 exports.deleteBlog =async (req,res) => {
     try{
-        //await Blog.findByIdAndDelete(req.params.id);
         await blogService.deleteBlog(req.params.id);
         res.status(204).json({
             status: 'sucess',
