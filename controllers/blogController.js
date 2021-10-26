@@ -1,11 +1,14 @@
 var express = require('express'), negotiate = require('express-negotiate');
 var js2xmlparser = require("js2xmlparser");
+const { MongoDbDao } = require('../dao and dto/mongoDbDao');
+const { BlogService } = require('../services/blogService');
 const Blog = require('./../models/blogModel');
-
+const blogDao = new MongoDbDao();
+const blogService = new BlogService(blogDao);
 
 exports.getAllBlogs = async(req,res) => {
     try{
-        const blogs = await Blog.find();
+        const blogs = await blogService.getAllBlogs();
         req.negotiate({
             'default': function() {
                 res.status(200).json({
@@ -30,7 +33,7 @@ exports.getAllBlogs = async(req,res) => {
 };
 exports.getBlog = async (req,res) => {
     try{
-        const blog = await Blog.findById(req.params.id);
+        const blog = await blogService.getBlog(req.params.id);
         req.negotiate({
             'default': function() {
                 res.status(200).json({
@@ -54,18 +57,18 @@ exports.getBlog = async (req,res) => {
 };
 exports.createBlog =  async(req,res) => {
     try{
-        const newBlog = await Blog.create(req.body);
+        const blog = await blogService.createBlog(req.body)
         req.negotiate({
             'default': function() {
                 res.status(201).json({
                     status: 'sucess',
                     data: {
-                        Blog: newBlog
+                        Blog: blog
                     }
                });
           }
           , 'xml': function() {
-              const newObj  = JSON.parse(JSON.stringify(newBlog));
+              const newObj  = JSON.parse(JSON.stringify(blog));
               res.send(js2xmlparser.parse("data", newObj));
           }
         });
@@ -78,10 +81,7 @@ exports.createBlog =  async(req,res) => {
 };
 exports.updateBlog = async(req,res) => {
    try{
-        const blog = await Blog.findByIdAndUpdate(req.params.id, req.body,{
-            new: true,
-            runValidators: true
-        });
+        const blog = await blogService.updateBlog(req.params.id, req.body);
         
         req.negotiate({
             'default': function() {
@@ -107,7 +107,7 @@ exports.updateBlog = async(req,res) => {
 
 exports.deleteBlog =async (req,res) => {
     try{
-        await Blog.findByIdAndDelete(req.params.id);
+        await blogService.deleteBlog(req.params.id);
         res.status(204).json({
             status: 'sucess',
             data: null
