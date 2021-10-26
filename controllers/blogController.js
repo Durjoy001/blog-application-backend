@@ -1,14 +1,26 @@
+var express = require('express'), negotiate = require('express-negotiate');
+var js2xmlparser = require("js2xmlparser");
 const Blog = require('./../models/blogModel');
+
+
 exports.getAllBlogs = async(req,res) => {
     try{
         const blogs = await Blog.find();
-        res.status(200).json({
-            status: 'sucess',
-            results: blogs.length,
-            data: {
-               blogs
-            }
-       });
+        req.negotiate({
+            'default': function() {
+                res.status(200).json({
+                    status: 'sucess',
+                    results: blogs.length,
+                    data: {
+                       blogs
+                    }
+               });
+          }
+          , 'xml': function() {
+              const newObj  = JSON.parse(JSON.stringify(blogs));
+              res.send(js2xmlparser.parse("data", newObj));
+          }
+      });
     }catch(err){
         res.status(404).json({
             status: 'fail',
@@ -17,15 +29,22 @@ exports.getAllBlogs = async(req,res) => {
     }
 };
 exports.getBlog = async (req,res) => {
-
     try{
         const blog = await Blog.findById(req.params.id);
-        res.status(200).json({
-        status: 'sucess',
-        data: {
-           blog
-        } 
-    });
+        req.negotiate({
+            'default': function() {
+                res.status(200).json({
+                    status: 'sucess',
+                    data: {
+                       blog
+                    }
+               });
+          }
+          , 'xml': function() {
+              const newObj  = JSON.parse(JSON.stringify(blog));
+              res.send(js2xmlparser.parse("data", newObj));
+          }
+        });
     }catch(err){
         res.status(404).json({
             status: 'fail',
@@ -36,13 +55,20 @@ exports.getBlog = async (req,res) => {
 exports.createBlog =  async(req,res) => {
     try{
         const newBlog = await Blog.create(req.body);
-
-        res.status(201).json({
-            status: 'sucess',
-            data: {
-                Blog: newBlog
-            }
-       });
+        req.negotiate({
+            'default': function() {
+                res.status(201).json({
+                    status: 'sucess',
+                    data: {
+                        Blog: newBlog
+                    }
+               });
+          }
+          , 'xml': function() {
+              const newObj  = JSON.parse(JSON.stringify(newBlog));
+              res.send(js2xmlparser.parse("data", newObj));
+          }
+        });
     }catch(err){
         res.status(400).json({
             status: 'fail',
@@ -56,12 +82,20 @@ exports.updateBlog = async(req,res) => {
             new: true,
             runValidators: true
         });
-
-        res.status(200).json({
-            status: 'sucess',
-            data: {
-               blog
-            }
+        
+        req.negotiate({
+            'default': function() {
+                res.status(200).json({
+                    status: 'sucess',
+                    data: {
+                        Blog: blog
+                    }
+               });
+          }
+          , 'xml': function() {
+              const newObj  = JSON.parse(JSON.stringify(blog));
+              res.send(js2xmlparser.parse("data", newObj));
+          }
         });
    }catch(err){
         res.status(404).json({
