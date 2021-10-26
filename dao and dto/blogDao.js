@@ -1,4 +1,9 @@
 class BlogDao{
+    constructor() {
+        if (this.constructor === BlogDao) {
+          throw new Error("Abstract classes can't be instantiated.");
+        }
+      }
     createBlog = async (blogBody) => {
 
     };
