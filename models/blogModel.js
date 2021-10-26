@@ -8,10 +8,10 @@ const blogSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: [true]
+        required: [true] 
     },
     time: {
-        type: String,
+        type: String, 
         required: [true,'A blog must have a time']
     }
 });
