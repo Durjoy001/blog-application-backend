@@ -4,11 +4,13 @@ const blogController = require('./../controllers/blogController');
 
 const blogValidators = require('./../validations/blogValidator');
 
+const authController = require('./../controllers/authController');
+
 
 const router = express.Router();
 
 router.route('/')
-.get(blogController.getAllBlogs)
+.get(authController.protect,blogController.getAllBlogs)
 .post(blogValidators.createBlogValidation(),blogValidators.validate,blogController.createBlog);
 
 router.route('/:id').
