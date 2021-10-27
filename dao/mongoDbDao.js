@@ -1,5 +1,5 @@
 const { BlogDao } = require("./blogDao");
-const { Dto } = require("./dto");
+const { Dto } = require("./../dto/dto");
 const Blog = require('./../models/blogModel');
 
 class MongoDbDao extends BlogDao{

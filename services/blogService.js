@@ -1,5 +1,5 @@
 
-const { BlogDao } = require('../dao and dto/blogDao');
+const { BlogDao } = require('../dao/blogDao');
 class BlogService{
     constructor(blogDao){
        this.blogDao = blogDao;
