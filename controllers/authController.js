@@ -3,12 +3,8 @@ const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync')
-
-
 const { MongoDbAuthDao } = require('./../dao/mongoDbAuthDao');
 const { AuthService } = require('./../services/authService');
-
-
 const authDao = new MongoDbAuthDao();
 const authService = new AuthService(authDao);
 
@@ -18,11 +14,11 @@ const signToken = id => {
     });
 }
 
-exports.signup = async(req,res) => {
+exports.signup = async(req,res,next) => {
     try{
         //const newUser = await User.create(req.body);
         
-        const newUser = await authService.signup(req);
+        const newUser = await authService.signup(req,next);
         const token = signToken(newUser._id);
         res.status(201).json({
             status: 'sucess',
@@ -40,19 +36,7 @@ exports.signup = async(req,res) => {
 };
 
 exports.login = catchAsync(async(req,res,next) => {
-    /*const {email,password} = req.body;
-    
-    //Check if email and password exist
-    if(!email || !password) {
-        return next(new AppError('Please provide email and password!!',400));
-    }
-    //check if user exists && password is correct
-    const user = await User.findOne({ email }).select('+password');
-
-    if(!user || !await user.correctPassword(password,user.password)){
-        return next(new AppError('Incorrect email or password', 401));
-    }*/
-    const user = await authService.login(req);
+    const user = await authService.login(req,next);
 
     //if everything ok, send token to client
     const token = signToken(user._id);
@@ -63,7 +47,6 @@ exports.login = catchAsync(async(req,res,next) => {
 });
 
 exports.protect = catchAsync(async (req,res,next) => {
-     
     //Getting token and check if it's there
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
@@ -75,7 +58,6 @@ exports.protect = catchAsync(async (req,res,next) => {
     //verification of token
     const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET);
     //check if user still exists
-    //const currentUser = await User.findById(decoded.id);
     const currentUser = await authService.protect(decoded.id);
     if(!currentUser){
         return next(new AppError('The user belonging to this token does no longer exist.',401));
@@ -83,21 +65,3 @@ exports.protect = catchAsync(async (req,res,next) => {
     req.user = currentUser;
     next();
 })
-
-/*exports.restrictTo = (...roles) => {
-    return (req,res,next) => {
-        if(!roles.includes(req.user.role)){
-            return next(new AppError('You do not have permission to perform this action.',403));
-        }
-        next();
-    }
-}*/
-
-/*exports.restrictTo =() => {
-    return (req,res,next) => {
-        if(req.body.creator != req.user.name){
-            return next(new AppError('You do not have permission to perform this action!!',403));
-        }
-        next();
-    }
-}*/

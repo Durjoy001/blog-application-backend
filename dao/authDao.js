@@ -4,10 +4,10 @@ class AuthDao{
           throw new Error("Abstract classes can't be instantiated.");
         }
       }
-    signup = async (req) => {
+    signup = async (req,next) => {
 
     };
-    login = async(req) => {
+    login = async(req,next) => {
         
     };
     protect = async(req) =>{

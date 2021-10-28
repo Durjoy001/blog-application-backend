@@ -4,11 +4,11 @@ const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 
 class MongoDbAuthDao extends AuthDao{
-    signup = async (req) => {
+    signup = async (req,next) => {
         const newUser = await User.create(req.body);
         return new AuthDto(newUser);
     };
-    login = async(req) => {
+    login = async(req,next) => {
         const {email,password} = req.body;
     
         //Check if email and password exist
