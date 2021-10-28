@@ -4,7 +4,7 @@ class BlogDao{
           throw new Error("Abstract classes can't be instantiated.");
         }
       }
-    createBlog = async (req) => {
+    createBlog = async (req,next) => {
 
     };
     getBlog = async(blogId) => {
@@ -13,7 +13,7 @@ class BlogDao{
     getAllBlogs = async() =>{
 
     };
-    updateBlog = async (req) => {
+    updateBlog = async (req,next) => {
         
     };
     deleteBlog = async(req) =>{

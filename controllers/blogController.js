@@ -55,9 +55,9 @@ exports.getBlog = async (req,res) => {
         });
     }
 };
-exports.createBlog =  async(req,res) => {
+exports.createBlog =  async(req,res,next) => {
     try{
-        const blog = await blogService.createBlog(req)
+        const blog = await blogService.createBlog(req,next)
         req.negotiate({
             'default': function() {
                 res.status(201).json({
@@ -79,9 +79,9 @@ exports.createBlog =  async(req,res) => {
         });
     }
 };
-exports.updateBlog = async(req,res) => {
+exports.updateBlog = async(req,res,next) => {
    try{
-        const blog = await blogService.updateBlog(req);
+        const blog = await blogService.updateBlog(req,next);
         
         req.negotiate({
             'default': function() {

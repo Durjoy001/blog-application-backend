@@ -4,8 +4,8 @@ class BlogService{
     constructor(blogDao){
        this.blogDao = blogDao;
     }
-    createBlog(req){
-        return this.blogDao.createBlog(req);
+    createBlog(req,next){
+        return this.blogDao.createBlog(req,next);
     };
     getBlog(blogId){
         return this.blogDao.getBlog(blogId);
@@ -13,8 +13,8 @@ class BlogService{
     getAllBlogs(){
         return this.blogDao.getAllBlogs();
     };
-    updateBlog(req){
-        return this.blogDao.updateBlog(req);
+    updateBlog(req,next){
+        return this.blogDao.updateBlog(req,next);
     };
     deleteBlog(req){
         return this.blogDao.deleteBlog(req);
