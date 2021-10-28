@@ -57,7 +57,7 @@ exports.getBlog = async (req,res) => {
 };
 exports.createBlog =  async(req,res) => {
     try{
-        const blog = await blogService.createBlog(req.body)
+        const blog = await blogService.createBlog(req)
         req.negotiate({
             'default': function() {
                 res.status(201).json({
@@ -81,7 +81,7 @@ exports.createBlog =  async(req,res) => {
 };
 exports.updateBlog = async(req,res) => {
    try{
-        const blog = await blogService.updateBlog(req.params.id, req.body);
+        const blog = await blogService.updateBlog(req);
         
         req.negotiate({
             'default': function() {
@@ -107,7 +107,7 @@ exports.updateBlog = async(req,res) => {
 
 exports.deleteBlog =async (req,res) => {
     try{
-        await blogService.deleteBlog(req.params.id);
+        await blogService.deleteBlog(req);
         res.status(204).json({
             status: 'sucess',
             data: null

@@ -10,12 +10,12 @@ const authController = require('./../controllers/authController');
 const router = express.Router();
 
 router.route('/')
-.get(authController.protect,blogController.getAllBlogs)
-.post(blogValidators.createBlogValidation(),blogValidators.validate,blogController.createBlog);
+.get(blogController.getAllBlogs)
+.post(authController.protect,blogValidators.createBlogValidation(),blogValidators.validate,blogController.createBlog);
 
 router.route('/:id').
 get(blogController.getBlog).
-patch(blogValidators.updateBlogValidation(),blogValidators.validate,blogController.updateBlog).
-delete(blogController.deleteBlog);
-
+patch(authController.protect,blogValidators.updateBlogValidation(),blogValidators.validate,blogController.updateBlog).
+delete(authController.protect,blogController.deleteBlog);
+ 
 module.exports = router;

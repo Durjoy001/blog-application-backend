@@ -4,6 +4,7 @@ class Dto{
         this.name = blogDto.name;
         this.description = blogDto.description;
         this.time = blogDto.time;
+        this.creator = blogDto.creator;
         this.id = blogDto._id;
     }
 }

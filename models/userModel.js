@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true,'please provide your name'],
+        unique: true
     },
     email: {
         type: String,
@@ -13,6 +14,11 @@ const userSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
         validate: [validator.isEmail,'Please provide a valid email!!']
+    },
+    role: {
+        type: String,
+        enum: ['user','admin'],
+        default: 'user'
     },
     password: {
         type: String,

@@ -1,10 +1,13 @@
 const { BlogDao } = require("./blogDao");
 const { Dto } = require("./../dto/dto");
 const Blog = require('./../models/blogModel');
+const AppError = require('./../utils/appError');
 
 class MongoDbDao extends BlogDao{
-    createBlog = async (blogBody) => {
-        const blog = await Blog.create(blogBody);
+    createBlog = async (req) => {
+       // console.log(req.user.name);
+        req.body.creator = req.user.name;
+        const blog = await Blog.create(req.body);
         return new Dto(blog);
     };
     getBlog = async(blogId) => {
@@ -19,15 +22,23 @@ class MongoDbDao extends BlogDao{
         }
         return Blogs;
     };
-    updateBlog = async (blogId, updateBody) => {
-        const blog = await Blog.findByIdAndUpdate(blogId, updateBody,{
+    updateBlog = async (req) => {
+        const findBlog = await Blog.findById(req.params.id);
+        if(req.user.name != findBlog.creator){
+            return next(new AppError('You do not have permission to perform this action!!',403));
+        }
+        const blog = await Blog.findByIdAndUpdate(req.params.id, req.body,{
             new: true,
             runValidators: true
         });
         return new Dto(blog);
     };
-    deleteBlog = async(blogId) =>{
-        await Blog.findByIdAndDelete(blogId);
+    deleteBlog = async(req) =>{
+        const findBlog = await Blog.findById(req.params.id);
+        if(req.user.name != findBlog.creator){
+            return next(new AppError('You do not have permission to perform this action!!',403));
+        }
+        await Blog.findByIdAndDelete(req.id);
         return;
     }
 }
