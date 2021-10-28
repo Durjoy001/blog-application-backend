@@ -1,9 +1,9 @@
 const { BlogDao } = require("./blogDao");
 const { BlogDto } = require("../dto/blogDto");
-const Blog = require('./../models/blogModel');
-const AppError = require('./../utils/appError');
+const Blog = require('../models/blogModel');
+const AppError = require('../utils/appError');
 
-class MongoDbDao extends BlogDao{
+class MongoDbBlogDao extends BlogDao{
     createBlog = async (req,next) => {
        // console.log(req.user.name);
         req.body.creator = req.user.name;
@@ -42,4 +42,4 @@ class MongoDbDao extends BlogDao{
         return;
     }
 }
-module.exports = {MongoDbDao};
+module.exports = {MongoDbBlogDao};

@@ -1,9 +1,9 @@
 var express = require('express'), negotiate = require('express-negotiate');
 var js2xmlparser = require("js2xmlparser");
-const { MongoDbDao } = require('../dao/mongoDbDao');
+const { MongoDbBlogDao } = require('../dao/mongoDbBlogDao');
 const { BlogService } = require('../services/blogService');
 const Blog = require('./../models/blogModel');
-const blogDao = new MongoDbDao();
+const blogDao = new MongoDbBlogDao();
 const blogService = new BlogService(blogDao);
 
 exports.getAllBlogs = async(req,res) => {
