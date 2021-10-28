@@ -1,4 +1,4 @@
-class Dto{
+class BlogDto{
     constructor(blog){
         let blogDto = JSON.parse(JSON.stringify(blog));
         this.name = blogDto.name;
@@ -8,4 +8,4 @@ class Dto{
         this.id = blogDto._id;
     }
 }
-module.exports = {Dto};
+module.exports = {BlogDto};

@@ -4,6 +4,14 @@ const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync')
 
+
+const { MongoDbAuthDao } = require('./../dao/mongoDbAuthDao');
+const { AuthService } = require('./../services/authService');
+
+
+const authDao = new MongoDbAuthDao();
+const authService = new AuthService(authDao);
+
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET,{
         expiresIn: process.env.JWT_EXPIRES_IN
@@ -12,10 +20,10 @@ const signToken = id => {
 
 exports.signup = async(req,res) => {
     try{
-        const newUser = await User.create(req.body);
-
+        //const newUser = await User.create(req.body);
+        
+        const newUser = await authService.signup(req);
         const token = signToken(newUser._id);
-
         res.status(201).json({
             status: 'sucess',
             token,
@@ -32,7 +40,7 @@ exports.signup = async(req,res) => {
 };
 
 exports.login = catchAsync(async(req,res,next) => {
-    const {email,password} = req.body;
+    /*const {email,password} = req.body;
     
     //Check if email and password exist
     if(!email || !password) {
@@ -43,7 +51,8 @@ exports.login = catchAsync(async(req,res,next) => {
 
     if(!user || !await user.correctPassword(password,user.password)){
         return next(new AppError('Incorrect email or password', 401));
-    }
+    }*/
+    const user = await authService.login(req);
 
     //if everything ok, send token to client
     const token = signToken(user._id);
@@ -66,7 +75,8 @@ exports.protect = catchAsync(async (req,res,next) => {
     //verification of token
     const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET);
     //check if user still exists
-    const currentUser = await User.findById(decoded.id);
+    //const currentUser = await User.findById(decoded.id);
+    const currentUser = await authService.protect(decoded.id);
     if(!currentUser){
         return next(new AppError('The user belonging to this token does no longer exist.',401));
     }  

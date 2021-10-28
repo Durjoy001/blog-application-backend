@@ -1,5 +1,5 @@
 const { BlogDao } = require("./blogDao");
-const { Dto } = require("./../dto/dto");
+const { BlogDto } = require("../dto/blogDto");
 const Blog = require('./../models/blogModel');
 const AppError = require('./../utils/appError');
 
@@ -8,17 +8,17 @@ class MongoDbDao extends BlogDao{
        // console.log(req.user.name);
         req.body.creator = req.user.name;
         const blog = await Blog.create(req.body);
-        return new Dto(blog);
+        return new BlogDto(blog);
     };
     getBlog = async(blogId) => {
         const blog = await Blog.findById(blogId);
-        return new Dto(blog);
+        return new BlogDto(blog);
     };
     getAllBlogs = async() =>{
         const blogs = await Blog.find();
         let Blogs  = [] ;
         for ( let i = 0 ; i < blogs.length; i++) {
-            Blogs[i] = new Dto(blogs[i]);
+            Blogs[i] = new BlogDto(blogs[i]);
         }
         return Blogs;
     };
@@ -31,7 +31,7 @@ class MongoDbDao extends BlogDao{
             new: true,
             runValidators: true
         });
-        return new Dto(blog);
+        return new BlogDto(blog);
     };
     deleteBlog = async(req) =>{
         const findBlog = await Blog.findById(req.params.id);
