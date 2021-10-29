@@ -13,11 +13,25 @@ const signToken = id => {
         expiresIn: process.env.JWT_EXPIRES_IN
     });
 }
-
+const authCookie = ()=> {
+    const cookieOptions = {
+        expires: new Date(
+            Date.now()+process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true
+    }
+    if(process.env.NODE_ENV === 'production'){
+        cookieOptions.secure = true;
+    }
+}
 exports.signup = async(req,res,next) => {
     try{
         const newUser = await authService.signup(req,next);
         const token = signToken(newUser._id);
+        const cookieOptions = authCookie();
+
+        res.cookie('jwt',token,cookieOptions);
+
         res.status(201).json({
             status: 'sucess',
             token,
@@ -38,29 +52,10 @@ exports.login = catchAsync(async(req,res,next) => {
 
     //if everything ok, send token to client
     const token = signToken(user._id);
+    const cookieOptions = authCookie();
+    res.cookie('jwt',token,cookieOptions);
     res.status(200).json({
         status: 'sucess',
         token
     });
 });
-
-/*exports.protect = catchAsync(async (req,res,next) => {
-    //Getting token and check if it's there
-    let token;
-    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-        token = req.headers.authorization.split(' ')[1];
-    }
-    if(!token){
-        return next(new AppError('You are not logged in! Please log in to get access.',401));
-    }
-    //verification of token
-    const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET);
-    //check if user still exists
-    const currentUser = await authService.protect(decoded.id);
-
-    if(!currentUser){
-        return next(new AppError('The user belonging to this token does no longer exist.',401));
-    }  
-    req.user = currentUser;
-    next();
-})*/
