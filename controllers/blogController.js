@@ -1,9 +1,9 @@
 var express = require('express'), negotiate = require('express-negotiate');
 var js2xmlparser = require("js2xmlparser");
-const { MongoDbDao } = require('../dao and dto/mongoDbDao');
+const { MongoDbBlogDao } = require('../dao/mongoDbBlogDao');
 const { BlogService } = require('../services/blogService');
 const Blog = require('./../models/blogModel');
-const blogDao = new MongoDbDao();
+const blogDao = new MongoDbBlogDao();
 const blogService = new BlogService(blogDao);
 
 exports.getAllBlogs = async(req,res) => {
@@ -55,9 +55,9 @@ exports.getBlog = async (req,res) => {
         });
     }
 };
-exports.createBlog =  async(req,res) => {
+exports.createBlog =  async(req,res,next) => {
     try{
-        const blog = await blogService.createBlog(req.body)
+        const blog = await blogService.createBlog(req,next)
         req.negotiate({
             'default': function() {
                 res.status(201).json({
@@ -79,9 +79,9 @@ exports.createBlog =  async(req,res) => {
         });
     }
 };
-exports.updateBlog = async(req,res) => {
+exports.updateBlog = async(req,res,next) => {
    try{
-        const blog = await blogService.updateBlog(req.params.id, req.body);
+        const blog = await blogService.updateBlog(req,next);
         
         req.negotiate({
             'default': function() {
@@ -107,7 +107,7 @@ exports.updateBlog = async(req,res) => {
 
 exports.deleteBlog =async (req,res) => {
     try{
-        await blogService.deleteBlog(req.params.id);
+        await blogService.deleteBlog(req);
         res.status(204).json({
             status: 'sucess',
             data: null

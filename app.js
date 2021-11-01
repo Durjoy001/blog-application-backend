@@ -12,4 +12,5 @@ app.use(express.json());
 app.use('/api/v1/blogs',blogRouter);
 app.use('/api/v1/users',userRouter);
 
+
 module.exports = app; 
