@@ -20,6 +20,7 @@ exports.getAllBlogs = async(req,res) => {
                });
           }
           , 'xml': function() {
+              res.type('application/xml');
               const newObj  = JSON.parse(JSON.stringify(blogs));
               res.send(js2xmlparser.parse("data", newObj));
           }

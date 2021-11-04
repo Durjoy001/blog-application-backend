@@ -4,7 +4,8 @@
   "description": "Learning node,express and mongo DB",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "jest"
   },
   "author": "Durjoy Dey",
   "license": "ISC",
@@ -19,7 +20,8 @@
     "mongoose": "^5.13.10",
     "morgan": "^1.10.0",
     "object-to-xml": "^2.0.0",
-    "validator": "^13.6.0"
+    "validator": "^13.6.0",
+    "xml": "^1.0.1"
   },
   "repository": {
     "type": "git",
@@ -28,5 +30,10 @@
   "bugs": {
     "url": "https://github.com/Durjoy001/blog-application-backend/issues"
   },
-  "homepage": "https://github.com/Durjoy001/blog-application-backend#readme"
+  "homepage": "https://github.com/Durjoy001/blog-application-backend#readme",
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "jest-sinon": "^1.0.4",
+    "supertest": "^6.1.6"
+  }
 }
