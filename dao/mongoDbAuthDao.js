@@ -8,7 +8,7 @@ class MongoDbAuthDao extends AuthDao{
         const newUser = await User.create(req.body);
         return new AuthDto(newUser);
     };
-    login = async(req,next) => {
+    login = async(req,next) => { 
         const {email,password} = req.body;
     
         //Check if email and password exist
