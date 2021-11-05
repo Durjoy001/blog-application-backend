@@ -94,44 +94,4 @@ describe('GET /blog', function() {
     });
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/*describe('For a Blog ID which doesn not Exist',  function() {
-    it('It should return a 404 and Error Message in xml format', function(done) {
-        app.get('/pathDontExistXML', function(req, res) {
-            const blogStub = sinon.stub(blogService,"getBlog").withArgs(req).returns("blog doesnot exist");
-            const blog = blogService.getBlog(req);
-            expect(blog).toEqual("blog doesnot exist");
-            blogStub.restore();
-            response.XMLBlogResponse(404,blog,res,"xml")
-        })
-        request(app)
-        .get('/pathDontExistXML')
-        .set('Accept', 'application/xml')
-        .expect('Content-Type',"application/xml; charset=utf-8")
-        .expect(200,js2xmlparser.parse("blogs",JSON.parse(JSON.stringify(({
-            format : "xml",
-            error : "Blog Doesnot Exist"
-        })))),done)
-    });
-    it('It should return a 404 and error message in json format', function(done) {
-        app.get('/pathDontExistJSON', function(req, res) {
-            const blogStub = sinon.stub(blogService,"getBlog").withArgs(req).returns("blog doesnot exist");
-            const blog = blogService.getBlog(req);
-            expect(blog).toEqual("blog doesnot exist");
-            blogStub.restore();
-            response.JSONBlogResponse(200,blog,res,"json")}
-        )
-        request(app)
-        .get('/pathDontExistJSON')
-        .set('Accept', 'application/json')
-        .expect('Content-Type',"application/json; charset=utf-8")
-        .expect(200,{
-            format : "xml",
-            error : "Blog Doesnot Exist"
-        },done)
-    });
-})*/
-
-   
+//////////////////////////////////////////////////////////////////////////////////////////////////////  
