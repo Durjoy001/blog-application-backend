@@ -12,14 +12,7 @@ exports.blogService = blogService;
 exports.getAllBlogs = async(req,res) => {
     try{
         const blogs = await blogService.getAllBlogs();
-        const NegotiateBlog = contentNegotiate.sendResponse(req,blogs,res);
-        res.status(200).json({
-            status: 'sucess',
-            results: NegotiateBlog.length,
-            data: {
-                NegotiateBlog
-            }
-       });
+        contentNegotiate.sendResponse(req,blogs,res);
     }catch(err){
         res.status(404).json({
             status: 'fail',
@@ -30,14 +23,7 @@ exports.getAllBlogs = async(req,res) => {
 exports.getBlog = async (req,res) => {
     try{
         const blog = await blogService.getBlog(req.params.id);
-        const NegotiateBlog = contentNegotiate.sendResponse(req,blog,res);
-        res.status(200).json({
-            status: 'sucess',
-            results: NegotiateBlog.length,
-            data: {
-                NegotiateBlog
-            }
-        });
+        contentNegotiate.sendResponse(req,blog,res);
     }catch(err){
         res.status(404).json({
             status: 'fail',
@@ -48,14 +34,7 @@ exports.getBlog = async (req,res) => {
 exports.createBlog =  async(req,res,next) => {
     try{
         const blog = await blogService.createBlog(req,next)
-        const NegotiateBlog = contentNegotiate.sendResponse(req,blog,res);
-        res.status(200).json({
-            status: 'sucess',
-            results: NegotiateBlog.length,
-            data: {
-                NegotiateBlog
-            }
-        });
+        contentNegotiate.sendResponse(req,blog,res);
     }catch(err){
         res.status(400).json({
             status: 'fail',
@@ -66,14 +45,7 @@ exports.createBlog =  async(req,res,next) => {
 exports.updateBlog = async(req,res,next) => {
    try{
         const blog = await blogService.updateBlog(req,next);
-        const NegotiateBlog = contentNegotiate.sendResponse(req,blog,res);
-        res.status(200).json({
-            status: 'sucess',
-            results: NegotiateBlog.length,
-            data: {
-                NegotiateBlog
-            }
-        });
+        contentNegotiate.sendResponse(req,blog,res);
    }catch(err){
         res.status(404).json({
             status: 'fail',

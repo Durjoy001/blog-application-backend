@@ -1,21 +1,22 @@
 var js2xmlparser = require("js2xmlparser");
 sendJsonResponse = (blog,res) => {
-    return blog;
+    return res.status(200).json({
+        status: 'success',
+        Blogs: blog.length,
+        data: {
+            blog
+        }
+   });
 }
 sendXmlResponse = (blog,res) => {
     //res.type('application/xml');
     res.setHeader('content-type', 'application/xml');
     const newObj  = JSON.parse(JSON.stringify(blog));
-    return js2xmlparser.parse("data", newObj);
+    return res.send(js2xmlparser.parse("data", newObj));
 }
 exports.sendResponse = (req,blog,res) => {
-    if(req.headers.accept === 'application/json'){
-        const blogs =  sendJsonResponse(blog,res);
-        return blogs;
-    }
-    else{
-        console.log("djhfjk")
-        const blogs =  sendXmlResponse(blog,res);
-        return blogs;
-    }
+    if(req.headers.accept === 'application/json')
+        sendJsonResponse(blog,res);
+    else
+        sendXmlResponse(blog,res);
 }

@@ -36,6 +36,7 @@
     "jest-mock-req-res": "^1.0.2",
     "jest-sinon": "^1.0.4",
     "mock-req-res": "^1.2.0",
+    "node-mocks-http": "^1.11.0",
     "supertest": "^6.1.6"
   }
 }

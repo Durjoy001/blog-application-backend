@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
+require('dotenv').config();
 const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync')
 const { MongoDbAuthDao } = require('./../dao/mongoDbAuthDao');
@@ -8,7 +9,9 @@ const { AuthService } = require('./../services/authService');
 const authDao = new MongoDbAuthDao();
 const authService = new AuthService(authDao);
 
-const signToken = id => {
+exports.authService = authService;
+
+const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET,{
         expiresIn: process.env.JWT_EXPIRES_IN
     });
