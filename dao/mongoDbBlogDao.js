@@ -8,7 +8,7 @@ class MongoDbBlogDao extends BlogDao{
        // console.log(req.user.name);
         req.body.creator = req.user.name;
         const blog = await Blog.create(req.body);
-        return new BlogDto(blog);
+        return new BlogDto(blog); 
     };
     getBlog = async(blogId) => {
         const blog = await Blog.findById(blogId);
