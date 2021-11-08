@@ -3,27 +3,16 @@ var js2xmlparser = require("js2xmlparser");
 const { MongoDbBlogDao } = require('../dao/mongoDbBlogDao');
 const { BlogService } = require('../services/blogService');
 const Blog = require('./../models/blogModel');
+const contentNegotiate = require('./../utils/contentNegotiate');
 const blogDao = new MongoDbBlogDao();
 const blogService = new BlogService(blogDao);
+
+exports.blogService = blogService;
 
 exports.getAllBlogs = async(req,res) => {
     try{
         const blogs = await blogService.getAllBlogs();
-        req.negotiate({
-            'default': function() {
-                res.status(200).json({
-                    status: 'sucess',
-                    results: blogs.length,
-                    data: {
-                       blogs
-                    }
-               });
-          }
-          , 'xml': function() {
-              const newObj  = JSON.parse(JSON.stringify(blogs));
-              res.send(js2xmlparser.parse("data", newObj));
-          }
-      });
+        contentNegotiate.sendResponse(req,blogs,res);
     }catch(err){
         res.status(404).json({
             status: 'fail',
@@ -34,20 +23,7 @@ exports.getAllBlogs = async(req,res) => {
 exports.getBlog = async (req,res) => {
     try{
         const blog = await blogService.getBlog(req.params.id);
-        req.negotiate({
-            'default': function() {
-                res.status(200).json({
-                    status: 'sucess',
-                    data: {
-                       blog
-                    }
-               });
-          }
-          , 'xml': function() {
-              const newObj  = JSON.parse(JSON.stringify(blog));
-              res.send(js2xmlparser.parse("data", newObj));
-          }
-        });
+        contentNegotiate.sendResponse(req,blog,res);
     }catch(err){
         res.status(404).json({
             status: 'fail',
@@ -58,20 +34,7 @@ exports.getBlog = async (req,res) => {
 exports.createBlog =  async(req,res,next) => {
     try{
         const blog = await blogService.createBlog(req,next)
-        req.negotiate({
-            'default': function() {
-                res.status(201).json({
-                    status: 'sucess',
-                    data: {
-                        Blog: blog
-                    }
-               });
-          }
-          , 'xml': function() {
-              const newObj  = JSON.parse(JSON.stringify(blog));
-              res.send(js2xmlparser.parse("data", newObj));
-          }
-        });
+        contentNegotiate.sendResponse(req,blog,res);
     }catch(err){
         res.status(400).json({
             status: 'fail',
@@ -82,21 +45,7 @@ exports.createBlog =  async(req,res,next) => {
 exports.updateBlog = async(req,res,next) => {
    try{
         const blog = await blogService.updateBlog(req,next);
-        
-        req.negotiate({
-            'default': function() {
-                res.status(200).json({
-                    status: 'sucess',
-                    data: {
-                        Blog: blog
-                    }
-               });
-          }
-          , 'xml': function() {
-              const newObj  = JSON.parse(JSON.stringify(blog));
-              res.send(js2xmlparser.parse("data", newObj));
-          }
-        });
+        contentNegotiate.sendResponse(req,blog,res);
    }catch(err){
         res.status(404).json({
             status: 'fail',
