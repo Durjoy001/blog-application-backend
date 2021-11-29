@@ -3,18 +3,17 @@ const { body, validationResult } = require('express-validator')
 exports.createBlogValidation = () => {
   return [
     //body('username').isEmail(),
-    body('name').isLength({ min: 5 , max: 100}).withMessage('name must be between 5 to 100 letter'),
-    body('description').isLength({ min: 5 , max: 1000}).withMessage('description must be between 5 to 1000 letter'),
+    body('name').trim().isLength({ min: 1 , max: 1000}).withMessage('Blog should have a title'),
+    body('description').trim().isLength({ min: 1 , max: 10000}).withMessage('Blog Should have a description'),
   ]
 }
 
 exports.updateBlogValidation = () => {
     return [
-      body('name').isLength({ min: 5 , max: 100}).withMessage('name must be between 5 to 100 letter'),
-      body('description').isLength({ min: 5 , max: 1000}).withMessage('description must be between 5 to 1000 letter'),
+      body('name').trim().isLength({ min: 1 , max: 1000}).withMessage('Blog should have a title'),
+      body('description').trim().isLength({ min: 1 , max: 10000}).withMessage('Blog should have a description'),
     ]
   }
-  
 
 exports.validate = (req, res, next) => {
   const errors = validationResult(req)
@@ -22,7 +21,7 @@ exports.validate = (req, res, next) => {
     return next()
   }
   const extractedErrors = []
-  errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }))
+  errors.array().map(err => extractedErrors.push( err.msg ))
 
   return res.status(422).json({
     errors: extractedErrors,

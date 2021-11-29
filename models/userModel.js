@@ -5,12 +5,12 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true,'please provide your name'],
+        required: true,
         unique: true
     },
     email: {
         type: String,
-        required: [true,'Please provide your email!!'],
+        required: true,
         unique: true,
         lowercase: true,
         validate: [validator.isEmail,'Please provide a valid email!!']
@@ -22,18 +22,18 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true,'Please provide a password'],
+        required: true,
         minlength: 8,
         select: false
     },
     passwordConfirm: {
         type: String,
-        required: [true, 'Please confirm your password'],
+        required: true,
         validate: {
             validator: function(el){
                 return el === this.password;
             },
-            message: 'password ar not same!!!'
+            message: 'Password are not same!!!'
         }
     }
 });

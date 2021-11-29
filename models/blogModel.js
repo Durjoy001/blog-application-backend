@@ -12,7 +12,7 @@ const blogSchema = new mongoose.Schema({
     },
     time: {
         type: String, 
-        required: [true,'A blog must have a time']
+        //required: [true,'A blog must have a time']
     },
     creator: {
         type: String

@@ -56,9 +56,11 @@ exports.login = catchAsync(async(req,res,next) => {
     //if everything ok, send token to client
     const token = signToken(user._id);
     const cookieOptions = authCookie();
+    //console.log(user.name);
     res.cookie('jwt',token,cookieOptions);
     res.status(200).json({
         status: 'sucess',
+        name: user.name,
         token
     });
 });

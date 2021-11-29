@@ -3,9 +3,10 @@ sendJsonResponse = (blog,res) => {
     return res.status(200).json({
         status: 'success',
         Blogs: blog.length,
-        data: {
+        /*data: {
             blog
-        }
+        }*/
+        blog
    });
 }
 sendXmlResponse = (blog,res) => {
@@ -15,8 +16,8 @@ sendXmlResponse = (blog,res) => {
     return res.send(js2xmlparser.parse("data", newObj));
 }
 exports.sendResponse = (req,blog,res) => {
-    if(req.headers.accept === 'application/json')
-        sendJsonResponse(blog,res);
-    else
+    if(req.headers.accept === 'application/xml')
         sendXmlResponse(blog,res);
+    else
+        sendJsonResponse(blog,res);
 }

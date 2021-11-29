@@ -6,7 +6,9 @@ const AppError = require('../utils/appError');
 class MongoDbBlogDao extends BlogDao{
     createBlog = async (req,next) => {
        // console.log(req.user.name);
-        req.body.creator = req.user.name;
+        console.log('create')
+        req.body.creator = req.user.name; 
+        req.body.time = new Date().toLocaleDateString();
         const blog = await Blog.create(req.body);
         return new BlogDto(blog); 
     };
