@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const app = require('./app');
+const path = require('path');
+const express = require('express')
 require('dotenv').config();
 
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
@@ -14,7 +16,15 @@ mongoose.connect(DB,{
     console.log('DB connection successful!!!');
 });
 
-const port = 8000;
+const port = process.env.PORT || 8000;
+
+if(process.env.NODE_ENV ==='production'){
+    app.use(express.static('build'));
+    app.get('*',(req,res) => {
+        req.sendFile(path.resolve(__dirname,'build','index.html'));
+    })
+}
+
 app.listen(port, () => {
     console.log(`App running on port ${port}....`);
 });
