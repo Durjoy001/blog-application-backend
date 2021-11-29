@@ -2,15 +2,16 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const path = require('path');
 
 const blogRouter = require('./routes/blogRoutes');
 const userRouter = require('./routes/userRoutes');
 
 const app = express();
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
-const path = require('path');
+
 app.use('/api/v1/blogs',blogRouter);
 app.use('/api/v1/users',userRouter);
 
