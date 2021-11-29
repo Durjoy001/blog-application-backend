@@ -10,9 +10,14 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
-
+const path = require('path');
 app.use('/api/v1/blogs',blogRouter);
 app.use('/api/v1/users',userRouter);
 
-
+if(process.env.NODE_ENV ==='production'){  
+    app.use(express.static('build'));
+    app.get('*',(req,res) => {
+        res.sendFile(path.resolve(__dirname,'build','index.html'));
+    })
+}
 module.exports = app; 
