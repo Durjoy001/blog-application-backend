@@ -4,7 +4,7 @@
   "description": "Learning node,express and mongo DB",
   "main": "app.js",
   "scripts": {
-    "start": "node server",
+    "start": "node server.js",
     "test": "jest"
   },
   "author": "Durjoy Dey",
