@@ -7,7 +7,7 @@ const authValidators = require('./../validations/authValidators')
 
 const router = express.Router();
 
-router.post('/signup',authValidators.signupValidation(),blogValidators.validate, authMiddlewares.isLogin,authController.signup);
+router.post('/signup',authValidators.signupValidation(),authValidators.validate, authMiddlewares.isLogin,authController.signup);
 router.post('/login',authMiddlewares.isLogin,authController.login);
 
 
