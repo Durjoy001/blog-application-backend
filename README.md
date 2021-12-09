@@ -1,6 +1,6 @@
 # Blog Application Backend.
 
-access my site at :
+access my site at : https://blog-application001.herokuapp.com
 
 ## Table of contents
 
@@ -96,7 +96,7 @@ This is the root url ,if you add the correct path after this url you can do your
 
 ## Api Documentation:
 
-- User signup : `POST /api/v1/users/signup`
+- **User signup** : `POST /api/v1/users/signup`
 
   - Request body
 
@@ -111,7 +111,7 @@ This is the root url ,if you add the correct path after this url you can do your
 
   - Status code
 
-    ```json
+    ```
     status : 201 Created
     ```
 
@@ -133,7 +133,7 @@ This is the root url ,if you add the correct path after this url you can do your
     }
     ```
 
-- User login : `POST /api/v1/users/login`
+- **User login** : `POST /api/v1/users/login`
 
   - Request body
 
@@ -146,7 +146,7 @@ This is the root url ,if you add the correct path after this url you can do your
 
   - Status code
 
-    ```json
+    ```
     status : 200 OK
     ```
 
@@ -160,13 +160,13 @@ This is the root url ,if you add the correct path after this url you can do your
     }
     ```
 
-* Get all blogs : `POST /api/v1/blogs/`
+* **Get all blogs** : `POST /api/v1/blogs/`
   - Get blogs in JSON format, so set this header
     ```
     Accept : application/json
     ```
   - Status code
-    ```json
+    ```
     Status : 200 OK
     ```
   - Valid response body
@@ -199,12 +199,12 @@ This is the root url ,if you add the correct path after this url you can do your
       ]
     }
     ```
-  * Get blogs in xml format, so set this header
+  * Get blogs in XML format, so set this header
     ```
     Accept : application/xml
     ```
   * Status code
-    ```json
+    ```
     Status : 200 OK
     ```
   * Valid response body
@@ -232,4 +232,117 @@ This is the root url ,if you add the correct path after this url you can do your
           <id>619c6eff3dd1eb0f5ca80fc5</id>
       </data>
     </data>
+    ```
+* **Get single blog by id** : `GET /api/v1/blogs/blog_id`
+  - Get blog in JSON format
+    ```
+    Accept : application/json
+    ```
+  - Status code
+    ```
+    Status : 200 OK
+    ```
+  - Valid response body
+    ```json
+    {
+      "status": "success",
+      "blog": {
+        "name": "Maybe Arsenal are interested’ – Sanches reacts to transfer talk and makes Barcelona admission",
+        "description": "The Portugal international midfielder has rebuilt his reputation at Lille and feels ready to make a big move again  Renato Sanches feels “ready” to make the of another big move, having previously flopped at Bayern Munich, and is aware Arsenal may be interested in his services after coming close to joining Barcelona last summer.",
+        "time": "11/22/2021",
+        "creator": "user100",
+        "id": "619b6e919db6280fe8559598"
+      }
+    }
+    ```
+  * Get blog in XML format
+    ```
+    Accept : application/xml
+    ```
+  * Status code
+    ```
+    Status : 200 OK
+    ```
+  * Valid response body
+    ```xml
+    <data>
+      <name>Maybe Arsenal are interested’ – Sanches reacts to transfer talk and makes Barcelona admission</name>
+      <description>The Portugal international midfielder has rebuilt his reputation at Lille and feels ready to make a big move again  Renato Sanches feels “ready” to make the of another big move, having previously flopped at Bayern Munich, and is aware Arsenal may be interested in his services after coming close to joining Barcelona last summer.</description>
+      <time>11/22/2021</time>
+      <creator>user100</creator>
+      <id>619b6e919db6280fe8559598</id>
+    </data>
+    ```
+* **Create blog** : `POST /api/v1/blogs`
+  - If a user want to create a blog he/she must have to logged in to the application.
+  * Then user must have to set the **jwt token** in the authorization header which he/she get after the loggin in a response body.
+  * Header
+    ```
+    Authorization: Bearer jwt_token
+    ```
+  * Request body
+    ```json
+    {
+      "name": "title of the blog",
+      "description": "description of the blog"
+    }
+    ```
+  * Status code
+    ```
+    Status : 201 Created
+    ```
+  * Valid response body (user can set which type of response format he/she willing to get , it can be json or xml, and default response format is json )
+    ```json
+    {
+      "status": "success",
+      "blog": {
+        "name": "title of the blog",
+        "description": "description of the blog",
+        "time": "12/9/2021",
+        "creator": "user500",
+        "id": "61b1c96d155ae73eade689f7"
+      }
+    }
+    ```
+* **Update blog** : `PATCH /api/v1/blogs/blog_id`
+  - A user only can update his/her own blog.
+  - So , user must have to logged in to the application and also have to set the jwt token in authorization header because authorization is checked by verifing **jwt token**.
+  - Header
+    ```
+    Authorization: Bearer jwt_token
+    ```
+  - Request body
+    ```json
+    {
+      "name": "Updated blog title",
+      "description": "updated blog description"
+    }
+    ```
+  - Status code
+    ```
+    Status : 200 OK
+    ```
+  - Valid response body (default response format is json )
+    ```json
+    {
+      "status": "success",
+      "blog": {
+        "name": "updated blog title",
+        "description": "updated blog description",
+        "time": "12/9/2021",
+        "creator": "test500",
+        "id": "61b1c96d155ae73eade689f7"
+      }
+    }
+    ```
+* Delete blog : `DELETE /api/v1/blogs/blog_id`
+  - A user only can delete his/her own blog.
+  - So , user must have to logged in to the application and also have to set the jwt token in authorization header because authorization is checked by verifing **jwt token**.
+  - Header
+    ```
+    Authorization: Bearer jwt_token
+    ```
+  - Status code
+    ```
+    Status : 204 No Content
     ```
