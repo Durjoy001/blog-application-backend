@@ -13,14 +13,14 @@ access my site at : https://blog-application001.herokuapp.com
 
 ## Introduction:
 
-It is a restfull api where users can get/read all the created blogs by other users, also can create their own blogs after signing up in the application and will able to update and delete his/her own blog.  
- This repository contain all about backend related stuff of my blog application project , for frontend code please visit this repo: https://github.com/Durjoy001/blog-application-frontend  
-I have **dockerized** this project and also write **unit and integration test** case.
+It is a **restfull api** where users can get all the created blogs by other users, also can create their own blogs after signing up in the application and will able to update and delete his/her own blog. For implementing authentication and authorization I use **JWT token.** I have **dockerized** this project and also write **unit and integration test** case.
+
+This repository contain all about backend related stuff of my blog application project , for frontend code please visit this repo: https://github.com/Durjoy001/blog-application-frontend
 
 ## Technologies:
 
-- **Express.js** which is a back end web application framework for Node.js.
-- NoSQL database **mongoDB**.
+- **Express.js** which is a back end web application framework for **Node.js**.
+- Database - **mongoDB (mongoose orm)**.
 - JavaScript testing framework **Jest**.
 
 ## Installation:
@@ -335,7 +335,7 @@ This is the root url ,if you add the correct path after this url you can do your
       }
     }
     ```
-* Delete blog : `DELETE /api/v1/blogs/blog_id`
+* **Delete blog** : `DELETE /api/v1/blogs/blog_id`
   - A user only can delete his/her own blog.
   - So , user must have to logged in to the application and also have to set the jwt token in authorization header because authorization is checked by verifing **jwt token**.
   - Header
