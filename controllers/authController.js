@@ -6,16 +6,23 @@ const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync')
 const { MongoDbAuthDao } = require('./../dao/mongoDbAuthDao');
 const { AuthService } = require('./../services/authService');
+const { response } = require('../app');
 const authDao = new MongoDbAuthDao();
 const authService = new AuthService(authDao);
+const authMiddlewares = require('./../middlewares/authMiddlewares');
 
 exports.authService = authService;
 
-const signToken = (id) => {
+const signAccessToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET,{
         expiresIn: process.env.JWT_EXPIRES_IN
     });
 }
+
+const signRefreshToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET,{});
+}
+
 const authCookie = ()=> {
     const cookieOptions = {
         expires: new Date(
@@ -30,18 +37,21 @@ const authCookie = ()=> {
 exports.signup = async(req,res,next) => {
     try{
         const newUser = await authService.signup(req,next);
-        const token = signToken(newUser._id);
+        const token = signAccessToken(newUser._id);
         const cookieOptions = authCookie();
 
         res.cookie('jwt',token,cookieOptions);
 
         res.status(201).json({
+           
+        });
+        /*res.status(201).json({
             status: 'sucess',
             token,
             data: {
                 user: newUser 
             }
-        });
+        });*/
     }catch(err){
         res.status(400).json({
             status: 'fail',
@@ -51,16 +61,45 @@ exports.signup = async(req,res,next) => {
 };
 
 exports.login = catchAsync(async(req,res,next) => {
-    const user = await authService.login(req,next);
+
+    const userData = await authService.login(req,next);
 
     //if everything ok, send token to client
-    const token = signToken(user._id);
+    const accessToken = signAccessToken(userData._id);
+    const refToken = signRefreshToken(userData._id);
+
+    //const rToken = refreshToken;
+    const rEmail = req.body.email;
+
     const cookieOptions = authCookie();
-    //console.log(user.name);
-    res.cookie('jwt',token,cookieOptions);
+
+    const result = await User.updateOne(
+        {email : rEmail },{$set: {refreshToken: refToken}}
+    )
+    //console.log(result);
+    res.cookie('jwt',accessToken,cookieOptions);
+
     res.status(200).json({
-        status: 'sucess',
-        name: user.name,
-        token
+        //status: 'sucess',
+        //name: user.name,
+        accessToken,
+        refToken 
+    });
+});
+
+exports.logout = catchAsync(async(req,res,next) =>{
+    let logToken;
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        logToken = req.headers.authorization.split(' ')[1];
+    }
+    const decoded = await promisify(jwt.verify)(logToken,process.env.JWT_SECRET);
+    const user = await authService.protect(decoded.id);
+    const rEmail = user.email;
+    const result = await User.updateOne(
+        {email : rEmail },{$set: {refreshToken: ''}}
+    )
+    res.status(200).json({
+        status: 'sucess'
+        //name: user.name,
     });
 });

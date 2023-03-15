@@ -21,7 +21,6 @@ exports.protect = catchAsync(async (req,res,next) => {
     const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET);
     //check if user still exists
     const currentUser = await authService.protect(decoded.id);
-    
     if(!currentUser){
         return next(new AppError('The user belonging to this token does no longer exist.',401));
     }  
@@ -30,7 +29,7 @@ exports.protect = catchAsync(async (req,res,next) => {
 })
 
 exports.isLogin = catchAsync(async(req,res,next) => {
-    console.log('dfdg');
+
     let loginToken;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         loginToken = req.headers.authorization.split(' ')[1];
@@ -39,8 +38,27 @@ exports.isLogin = catchAsync(async(req,res,next) => {
         //verification of token
         const decoded = await promisify(jwt.verify)(loginToken,process.env.JWT_SECRET);
         const currentUser = await authService.protect(decoded.id);
+        //console.log(currentUser);
         if(currentUser){
             return next(new AppError('You are already logged in.',401));
+        }
+    }
+    next();
+})
+
+
+exports.isLogout = catchAsync(async(req,res,next) => {
+
+    let logToken;
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        logToken = req.headers.authorization.split(' ')[1];
+    }
+    if(logToken){
+        //verification of token
+        const decoded = await promisify(jwt.verify)(logToken,process.env.JWT_SECRET);
+        const user = await authService.protect(decoded.id);
+        if(!user){
+            return next(new AppError('You are already logged out.',401));
         }
     }
     next();
