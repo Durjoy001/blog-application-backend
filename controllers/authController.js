@@ -103,3 +103,20 @@ exports.logout = catchAsync(async(req,res,next) =>{
         //name: user.name,
     });
 });
+
+
+exports.generateToken = catchAsync(async (req,res,next) => {
+    try{
+        const rtoken = req.body.userRefreshToken;
+        const decode = await promisify(jwt.verify)(rtoken,process.env.JWT_REFRESH_SECRET);
+        const newAccessToken = signAccessToken(decode.id);
+        res.status(200).json({
+            data : newAccessToken
+        });
+    }catch(err){
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        });
+    }
+});
