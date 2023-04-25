@@ -9,14 +9,14 @@ class MongoDbAuthDao extends AuthDao{
         return new AuthDto(newUser);
     };
     login = async(req,next) => { 
-        const {email,password} = req.body;
+        const {name,password} = req.body;
     
         //Check if email and password exist
-        if(!email || !password) {
+        if(!name || !password) {
             return next(new AppError('Please provide email and password!!',400));
         }
         //check if user exists && password is correct
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ name }).select('+password');
     
         if(!user || !await user.correctPassword(password,user.password)){
             return next(new AppError('Incorrect email or password', 401));

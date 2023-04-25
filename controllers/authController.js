@@ -69,14 +69,14 @@ exports.login = catchAsync(async(req,res,next) => {
     const refToken = signRefreshToken(userData._id);
 
     //const rToken = refreshToken;
-    const rEmail = req.body.email;
+    const rName = req.body.name;
 
     const cookieOptions = authCookie();
 
     const result = await User.updateOne(
-        {email : rEmail },{$set: {refreshToken: refToken}}
+        {name : rName },{$set: {refreshToken: refToken}}
     )
-    //console.log(result);
+   // console.log(result);
     res.cookie('jwt',accessToken,cookieOptions);
 
     res.status(200).json({

@@ -1,13 +1,8 @@
 var js2xmlparser = require("js2xmlparser");
 sendJsonResponse = (blog,res) => {
-    return res.status(200).json({
-        status: 'success',
-        Blogs: blog.length,
-        /*data: {
-            blog
-        }*/
+    return res.status(200).json(
         blog
-   });
+   );
 }
 sendXmlResponse = (blog,res) => {
     //res.type('application/xml');
