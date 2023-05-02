@@ -33,6 +33,7 @@ exports.getBlog = async (req,res) => {
 };
 exports.createBlog =  async(req,res,next) => {
     try{
+        console.log("rew body",req.body)
         const blog = await blogService.createBlog(req,next)
         contentNegotiate.sendResponse(req,blog,res);
     }catch(err){
